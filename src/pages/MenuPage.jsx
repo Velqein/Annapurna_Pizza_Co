@@ -81,44 +81,53 @@ function getPizzaTag(pizza, index) {
 }
 
 function PizzaListCard({ pizza, index, onAdd, isVeg }) {
-  const tag   = getPizzaTag(pizza, index);
-  const color = isVeg ? "#27AE60" : "#E6392E";
-  const numBg = isVeg ? "linear-gradient(160deg,#618024,#8FA840)" : "linear-gradient(160deg,#C0311F,#E6392E)";
+  const tag = getPizzaTag(pizza, index);
+  const addBg     = isVeg ? "#2C5F2E" : "#E6392E";
+  const addShadow = isVeg ? "rgba(44,95,46,0.36)" : "rgba(230,57,46,0.36)";
+
+  const getBadge = () => {
+    if (pizza.badge === "BESTSELLER")     return { bg:"#E8F5E9", color:"#1B5E20", text:"Bestseller" };
+    if (pizza.badge === "POPULAR")        return { bg:"#FFF3E0", color:"#E65100", text:"Popular" };
+    if (pizza.badge?.includes("HOT"))     return { bg:"#FFEBEE", color:"#C62828", text:"🔥 Hot" };
+    return { bg: isVeg?"#E8F5E9":"#FFEBEE", color: isVeg?"#2C5F2E":"#C0311F", text:`${tag.icon} ${tag.label}` };
+  };
+  const badge = getBadge();
+
   return (
-    <motion.div style={{ display:"flex", alignItems:"center", background:"linear-gradient(135deg,#FFF9F0,#FFF2E0)", borderRadius:26, boxShadow:"0 4px 22px rgba(180,120,0,0.13)", overflow:"visible", marginBottom:12, position:"relative", border:"1px solid rgba(210,170,90,0.22)" }}
-      whileHover={{y:-2,boxShadow:"0 12px 36px rgba(180,120,0,0.22)"}} whileTap={{scale:0.985}}
-      initial={{opacity:0,x:-16}} animate={{opacity:1,x:0}} transition={{delay:index*0.05,type:"spring",stiffness:280,damping:26}}>
-      {/* number tab */}
-      <div style={{ width:36, alignSelf:"stretch", background:numBg, borderRadius:"26px 0 0 26px", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-        <span style={{ fontFamily:"'Poppins',sans-serif", fontWeight:800, fontSize:11, color:"rgba(255,255,255,0.95)", writingMode:"vertical-rl", transform:"rotate(180deg)", letterSpacing:1 }}>{pizza.num}</span>
-      </div>
-      {/* pizza image */}
-      <div style={{ width:100, height:100, borderRadius:"50%", background:isVeg?"linear-gradient(145deg,#EEF5E4,#E2EDD0)":"linear-gradient(145deg,#FFEEED,#FFD8D4)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, margin:"13px 0 13px 13px", boxShadow:"0 4px 16px rgba(0,0,0,0.10)", overflow:"hidden" }}>
+    <motion.div style={{ display:"flex", alignItems:"center", background:"#FFFFFF", borderRadius:20, boxShadow:"0 2px 14px rgba(0,0,0,0.07)", overflow:"hidden", marginBottom:12, padding:12, gap:13, border:"1px solid rgba(0,0,0,0.06)" }}
+      whileHover={{y:-2,boxShadow:"0 8px 24px rgba(0,0,0,0.11)"}} whileTap={{scale:0.985}}
+      initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{delay:index*0.05,type:"spring",stiffness:280,damping:26}}>
+
+      {/* Big square image */}
+      <div style={{ width:110, height:110, borderRadius:16, overflow:"hidden", flexShrink:0, background:isVeg?"linear-gradient(145deg,#EEF5E4,#E2EDD0)":"linear-gradient(145deg,#FFEEED,#FFD8D4)" }}>
         {pizza.img
           ? <img src={pizza.img} alt={pizza.name} loading="lazy"
               style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"center" }}
               onError={e=>{ e.currentTarget.style.display="none"; e.currentTarget.nextSibling.style.display="flex"; }}/>
           : null}
-        <div style={{ display:pizza.img?"none":"flex", width:"100%", height:"100%", alignItems:"center", justifyContent:"center", transform:"scale(0.9)" }}>
-          <PizzaSVG pizza={pizza} size={100}/>
+        <div style={{ display:pizza.img?"none":"flex", width:"100%", height:"100%", alignItems:"center", justifyContent:"center" }}>
+          <PizzaSVG pizza={pizza} size={110}/>
         </div>
       </div>
-      {/* content */}
-      <div style={{ flex:1, padding:"14px 12px 14px 14px", minWidth:0 }}>
-        <div style={{ display:"flex", alignItems:"center", gap:5, marginBottom:2 }}>
-          <div style={{ width:13, height:13, border:`1.8px solid ${color}`, borderRadius:3, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-            <div style={{ width:5.5, height:5.5, borderRadius:"50%", background:color }}/>
-          </div>
-          <h3 style={{ fontFamily:"'Poppins',sans-serif", fontWeight:800, fontSize:13.5, color:"#1E1E1E", lineHeight:1.2, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{pizza.name}</h3>
+
+      {/* Content */}
+      <div style={{ flex:1, minWidth:0 }}>
+        {/* Name + Badge */}
+        <div style={{ display:"flex", alignItems:"flex-start", gap:7, marginBottom:5, flexWrap:"wrap" }}>
+          <h3 style={{ fontFamily:"'Poppins',sans-serif", fontWeight:800, fontSize:14.5, color:"#1A1A1A", lineHeight:1.2 }}>{pizza.name}</h3>
+          <span style={{ fontFamily:"'Poppins',sans-serif", fontSize:9.5, fontWeight:700, background:badge.bg, color:badge.color, padding:"2px 9px", borderRadius:20, flexShrink:0, marginTop:1 }}>{badge.text}</span>
         </div>
-        <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, color:isVeg?"#618024":"#C0311F", fontStyle:"italic", fontWeight:600, marginBottom:4 }}>{tag.icon} {tag.label}</p>
-        <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, color:"#A0917F", lineHeight:1.4, marginBottom:8, overflow:"hidden", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical" }}>{pizza.desc}</p>
-        <div style={{ borderTop:"1.5px dashed #EDE5DC", marginBottom:8 }}/>
+
+        {/* Description */}
+        <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:11.5, color:"#888", lineHeight:1.45, marginBottom:12, overflow:"hidden", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical" }}>{pizza.desc}</p>
+
+        {/* Price + CTA */}
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-          <span style={{ fontFamily:"'Poppins',sans-serif", fontWeight:900, fontSize:16, color:"#E6392E", letterSpacing:-0.5 }}>{pizza.price}/-</span>
-          <motion.button style={{ width:32, height:32, borderRadius:"50%", background:isVeg?"linear-gradient(135deg,#618024,#8FA840)":"linear-gradient(135deg,#E6392E,#A8251C)", border:"none", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:`0 4px 12px ${isVeg?"rgba(97,128,36,0.42)":"rgba(230,57,46,0.42)"}`, flexShrink:0 }}
-            whileHover={{scale:1.14}} whileTap={{scale:0.86}} onClick={e=>{ e.stopPropagation(); onAdd(pizza); }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" strokeWidth="2.8" strokeLinecap="round"/></svg>
+          <span style={{ fontFamily:"'Poppins',sans-serif", fontWeight:900, fontSize:21, color:"#1A1A1A" }}>₹{pizza.price}</span>
+          <motion.button style={{ background:addBg, border:"none", borderRadius:12, padding:"9px 16px", cursor:"pointer", display:"flex", alignItems:"center", gap:5, boxShadow:`0 4px 14px ${addShadow}`, flexShrink:0 }}
+            whileHover={{scale:1.06}} whileTap={{scale:0.88}} onClick={e=>{ e.stopPropagation(); onAdd(pizza); }}>
+            <span style={{ color:"white", fontFamily:"'Poppins',sans-serif", fontWeight:700, fontSize:13 }}>Add</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" strokeWidth="2.8" strokeLinecap="round"/></svg>
           </motion.button>
         </div>
       </div>
@@ -357,7 +366,7 @@ export default function MenuPage() {
   ];
 
   return (
-    <div style={{ width:"100%", maxWidth:430, height:"100svh", display:"flex", flexDirection:"column", background:"#EDE4D4", overflow:"hidden", position:"relative" }}>
+    <div style={{ width:"100%", maxWidth:430, height:"100svh", display:"flex", flexDirection:"column", background:"#F5F2EE", overflow:"hidden", position:"relative" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Pacifico&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
@@ -371,7 +380,7 @@ export default function MenuPage() {
       <div style={{ position:"absolute", top:-50, right:-50, width:180, height:180, borderRadius:"50%", background:"radial-gradient(circle,rgba(230,57,46,0.07) 0%,transparent 70%)", pointerEvents:"none", zIndex:0 }}/>
 
       {/* ── COMPACT HEADER — glass so banner shows behind it ── */}
-      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"10px 18px 8px", flexShrink:0, position:"relative", zIndex:100, background: activeTab===0 ? "rgba(237,228,212,0.28)" : "rgba(237,228,212,0.97)", backdropFilter:"blur(14px)", WebkitBackdropFilter:"blur(14px)", boxShadow: activeTab===0 ? "none" : "0 1px 0 rgba(0,0,0,0.06)", transition:"background 0.3s" }}>
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"10px 18px 8px", flexShrink:0, position:"relative", zIndex:100, background: activeTab===0 ? "rgba(245,242,238,0.28)" : "rgba(245,242,238,0.97)", backdropFilter:"blur(14px)", WebkitBackdropFilter:"blur(14px)", boxShadow: activeTab===0 ? "none" : "0 1px 0 rgba(0,0,0,0.06)", transition:"background 0.3s" }}>
         {/* Back button */}
         <motion.button
           style={{ background:"white", border:"none", borderRadius:12, padding:"8px 12px", cursor:"pointer",
@@ -443,11 +452,11 @@ export default function MenuPage() {
             </div>
 
             {/* ── VEG / NON-VEG — outside banner so sticky works throughout scroll ── */}
-            <div style={{ position:"sticky", top:0, zIndex:50, padding:"10px 14px", background:"rgba(237,228,212,0.97)", backdropFilter:"blur(18px)", WebkitBackdropFilter:"blur(18px)", boxShadow:"0 2px 14px rgba(0,0,0,0.07)" }}>
+            <div style={{ position:"sticky", top:0, zIndex:50, padding:"10px 14px", background:"rgba(245,242,238,0.97)", backdropFilter:"blur(18px)", WebkitBackdropFilter:"blur(18px)", boxShadow:"0 2px 14px rgba(0,0,0,0.07)" }}>
               <div style={{ background:"white", borderRadius:50, padding:4, display:"flex", boxShadow:"0 4px 18px rgba(0,0,0,0.09)" }}>
                 {[{label:"VEG",icon:"🌿",val:"veg"},{label:"NON-VEG",icon:"🍗",val:"nonveg"}].map(cat => {
                   const on = category===cat.val;
-                  const bg = on ? (cat.val==="veg"?"linear-gradient(135deg,#618024,#8FA840)":"linear-gradient(135deg,#C02818,#E6392E)") : "transparent";
+                  const bg = on ? (cat.val==="veg"?"linear-gradient(135deg,#1B4332,#2C5F2E)":"linear-gradient(135deg,#C02818,#E6392E)") : "transparent";
                   return (
                     <motion.button key={cat.val} style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:8, padding:"12px 0", borderRadius:46, border:"none", cursor:"pointer", fontFamily:"'Poppins',sans-serif", fontWeight:700, fontSize:13, background:bg, color:on?"white":"#9CA3AF" }}
                       onClick={()=>setCategory(cat.val)} whileTap={{scale:0.96}} layout>
@@ -460,18 +469,12 @@ export default function MenuPage() {
 
             {/* pizza list */}
             <div style={{ padding:"14px 14px 0" }}>
-              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:14 }}>
-                <div style={{ display:"flex", alignItems:"center", gap:7 }}>
-                  <span style={{ fontSize:14 }}>{isVeg?"🌿":"🍗"}</span>
-                  <div>
-                    <p style={{ fontFamily:"'Poppins',sans-serif", fontWeight:800, fontSize:16, color:"#1E1E1E", lineHeight:1 }}>{isVeg?"Veg Pizza":"Non-Veg Pizza"}</p>
-                    <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, color:"#B0A090", marginTop:2 }}>{pizzas.length} varieties</p>
-                  </div>
+              <div style={{ display:"flex", alignItems:"center", gap:7, marginBottom:14 }}>
+                <span style={{ fontSize:14 }}>{isVeg?"🌿":"🍗"}</span>
+                <div>
+                  <p style={{ fontFamily:"'Poppins',sans-serif", fontWeight:800, fontSize:16, color:"#1E1E1E", lineHeight:1 }}>{isVeg?"Veg Pizza":"Non-Veg Pizza"}</p>
+                  <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, color:"#B0A090", marginTop:2 }}>{pizzas.length} varieties</p>
                 </div>
-                <motion.button style={{ display:"flex", alignItems:"center", gap:5, background:"white", border:"none", borderRadius:20, padding:"7px 13px", cursor:"pointer", boxShadow:"0 3px 12px rgba(0,0,0,0.07)" }} whileTap={{scale:0.93}}>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke="#6B7280" strokeWidth="2" strokeLinecap="round"/></svg>
-                  <span style={{ fontFamily:"'Poppins',sans-serif", fontSize:11, fontWeight:600, color:"#6B7280" }}>Filter</span>
-                </motion.button>
               </div>
               <AnimatePresence mode="wait">
                 <motion.div key={category} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:0.18}}>
@@ -517,11 +520,11 @@ export default function MenuPage() {
 
       {/* ── BOTTOM NAV ── */}
       <div style={{ position:"absolute", bottom:0, left:0, right:0, padding:"0 14px 14px", zIndex:300 }}>
-        <motion.div style={{ background:"rgba(237,228,212,0.96)", backdropFilter:"blur(26px)", WebkitBackdropFilter:"blur(26px)", borderRadius:26, padding:"10px 4px", boxShadow:"0 -2px 0 rgba(0,0,0,0.03),0 -8px 34px rgba(0,0,0,0.09)", display:"flex", justifyContent:"space-around", border:"1px solid rgba(237,228,212,0.92)" }}
+        <motion.div style={{ background:"rgba(245,242,238,0.96)", backdropFilter:"blur(26px)", WebkitBackdropFilter:"blur(26px)", borderRadius:26, padding:"10px 4px", boxShadow:"0 -2px 0 rgba(0,0,0,0.03),0 -8px 34px rgba(0,0,0,0.09)", display:"flex", justifyContent:"space-around", border:"1px solid rgba(245,242,238,0.92)" }}
           initial={{y:80}} animate={{y:0}} transition={{type:"spring",stiffness:260,damping:22,delay:0.3}}>
           {NAV_TABS.map(item => {
             const on = activeTab===item.idx;
-            const c  = on?"#E6392E":"#9CA3AF";
+            const c  = on?"#2C5F2E":"#9CA3AF";
             return (
               <motion.button key={item.idx}
                 style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:3, padding:"6px 14px", borderRadius:16, border:"none", background:"transparent", cursor:"pointer", position:"relative" }}
@@ -538,7 +541,7 @@ export default function MenuPage() {
                 <span style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, fontWeight:on?700:400, color:c }}>
                   {item.idx===3 && cartTotal>0 ? `₹${cartTotal}` : item.label}
                 </span>
-                {on && <motion.div layoutId="menuNav" style={{ position:"absolute", bottom:-2, width:22, height:3.5, background:"linear-gradient(90deg,#E6392E,#FF5555)", borderRadius:3 }} transition={{type:"spring",stiffness:380,damping:28}}/>}
+                {on && <motion.div layoutId="menuNav" style={{ position:"absolute", bottom:-2, width:22, height:3.5, background:"linear-gradient(90deg,#1B4332,#2C5F2E)", borderRadius:3 }} transition={{type:"spring",stiffness:380,damping:28}}/>}
               </motion.button>
             );
           })}
