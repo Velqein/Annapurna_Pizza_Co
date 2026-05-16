@@ -85,8 +85,8 @@ function PizzaListCard({ pizza, index, onAdd, isVeg }) {
   const color = isVeg ? "#27AE60" : "#E6392E";
   const numBg = isVeg ? "linear-gradient(160deg,#618024,#8FA840)" : "linear-gradient(160deg,#C0311F,#E6392E)";
   return (
-    <motion.div style={{ display:"flex", alignItems:"center", background:"white", borderRadius:26, boxShadow:"0 6px 22px rgba(0,0,0,0.08)", overflow:"visible", marginBottom:12, position:"relative" }}
-      whileHover={{y:-2,boxShadow:"0 12px 36px rgba(0,0,0,0.12)"}} whileTap={{scale:0.985}}
+    <motion.div style={{ display:"flex", alignItems:"center", background:"linear-gradient(135deg,#FFF9F0,#FFF2E0)", borderRadius:26, boxShadow:"0 4px 22px rgba(180,120,0,0.13)", overflow:"visible", marginBottom:12, position:"relative", border:"1px solid rgba(210,170,90,0.22)" }}
+      whileHover={{y:-2,boxShadow:"0 12px 36px rgba(180,120,0,0.22)"}} whileTap={{scale:0.985}}
       initial={{opacity:0,x:-16}} animate={{opacity:1,x:0}} transition={{delay:index*0.05,type:"spring",stiffness:280,damping:26}}>
       {/* number tab */}
       <div style={{ width:36, alignSelf:"stretch", background:numBg, borderRadius:"26px 0 0 26px", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
@@ -140,7 +140,7 @@ function CombosContent({ onAdd }) {
       </div>
       {COMBOS.map((combo) => (
         <motion.div key={combo.id}
-          style={{ background:"white", borderRadius:22, padding:"16px", marginBottom:12, boxShadow:"0 6px 22px rgba(0,0,0,0.08)", border:`1.5px solid ${combo.isVeg?"rgba(97,128,36,0.15)":"rgba(230,57,46,0.15)"}` }}
+          style={{ background:"linear-gradient(135deg,#FFF9F0,#FFF2E0)", borderRadius:22, padding:"16px", marginBottom:12, boxShadow:"0 4px 22px rgba(180,120,0,0.13)", border:`1.5px solid ${combo.isVeg?"rgba(97,128,36,0.2)":"rgba(230,57,46,0.2)"}` }}
           whileHover={{y:-2}}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:12 }}>
             <div style={{ display:"flex", alignItems:"center", gap:12 }}>
@@ -248,7 +248,7 @@ function CartContent({ items, onUpdateQty, navigate }) {
             <AnimatePresence>
               {items.map(item => (
                 <motion.div key={item.id}
-                  style={{ display:"flex", alignItems:"center", background:"white", borderRadius:18, padding:"12px 14px", marginBottom:10, boxShadow:"0 4px 14px rgba(0,0,0,0.07)" }}
+                  style={{ display:"flex", alignItems:"center", background:"linear-gradient(135deg,#FFF9F0,#FFF2E0)", borderRadius:18, padding:"12px 14px", marginBottom:10, boxShadow:"0 4px 14px rgba(180,120,0,0.11)", border:"1px solid rgba(210,170,90,0.18)" }}
                   initial={{opacity:0,x:-14}} animate={{opacity:1,x:0}} exit={{opacity:0,x:14,height:0,padding:0,marginBottom:0}}
                   layout>
                   {/* emoji / veg dot */}
@@ -277,7 +277,7 @@ function CartContent({ items, onUpdateQty, navigate }) {
           </div>
 
           {/* bill summary */}
-          <div style={{ background:"white", borderRadius:20, padding:"16px", marginBottom:14, boxShadow:"0 4px 16px rgba(0,0,0,0.07)" }}>
+          <div style={{ background:"linear-gradient(135deg,#FFF9F0,#FFF2E0)", borderRadius:20, padding:"16px", marginBottom:14, boxShadow:"0 4px 16px rgba(180,120,0,0.11)", border:"1px solid rgba(210,170,90,0.18)" }}>
             <p style={{ fontFamily:"'Poppins',sans-serif", fontWeight:700, fontSize:13, color:"#1E1E1E", marginBottom:10 }}>Bill Summary</p>
             <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
               <span style={{ fontFamily:"'Poppins',sans-serif", fontSize:12, color:"#7B5A3A" }}>Items ({itemCount})</span>
